@@ -25,7 +25,7 @@
         <property name="driverClass" value="com.mysql.cj.jdbc.Driver"></property>
         <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/threeonezero?useUnicode=true&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"></property>
         <property name="user" value="root"></property>
-        <property name="password" value="lanqiao228"></property>
+        <property name="password" value=""></property>
     </bean>
     <!--2.2.配置SqlSessionFactory工厂，数据源使用已定义的数据源即可,spring整合mybatis，需要添加转换的依赖包-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
