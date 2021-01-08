@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd ">
+    <!-- 如果使用sreing管理bean,让spring自动扫描包，将组件注解过的类自动诸如到ioc容器-->
+    <!-- 1.开启注解的扫描 扫描service层和dao层对象，springMVC负责扫描Controller层对象-->
+    <context:component-scan base-package="lan.qiao">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--2.将mybatis整合到spring-->
+    <!--2.1配置数据库连接池，通过连接池管理数据库连接,添加相应的依赖包 dbvpc3p0 阿里的德鲁伊druid,本例使用c3p0-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/threeonezero?useUnicode=true&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"></property>
+        <property name="user" value="root"></property>
+        <property name="password" value="lanqiao228"></property>
+    </bean>
+    <!--2.2.配置SqlSessionFactory工厂，数据源使用已定义的数据源即可,spring整合mybatis，需要添加转换的依赖包-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--        给映射类配置别名  默认别名为model类的首字母小写  -->
+        <!--        如lan.qiao.domain.Userinfo  在mapper.xml中可用Userinfo调用-->
+        <property name="typeAliasesPackage" value="lan.qiao.domain"/>
+        <property name="dataSource" ref="dataSource"></property>
+        <!--        配置pagehelper-->
+        <property name="plugins">
+            <bean class="com.github.pagehelper.PageInterceptor">
+                <property name="properties">
+                    <props>
+                        <prop key="helperDialect">mysql</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    <!--2.3.配置需要生成动态代理的接口是哪些-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="lan.qiao.dao"></property>
+    </bean>
+    <!--2.4.配置事物-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--        配置通知,对于查询操作无需进行事务管理-->
+    <tx:advice id="transactionInterceptor" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="*" isolation="DEFAULT"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--    配置AOP的增强能力-->
+    <aop:config>
+        <aop:advisor advice-ref="transactionInterceptor" pointcut="execution(* lan.qiao.service.impl.*ServiceImpl.*(..))"/>
+    </aop:config>
+
+    <!--    配置文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"></property>  <!--默认编码-->
+        <property name="maxUploadSize" value="5242440"></property>    <!--设置最大支持的上传文件大小 B-->
+    </bean>
+</beans>

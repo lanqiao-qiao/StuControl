@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="lan.qiao.dao.GdminMapper">
+    <select id="findAll" resultType="lan.qiao.domain.Gdmin">
+        select * from gdmin
+    </select>
+
+    <select id="findOneByGdmin" resultType="lan.qiao.domain.Gdmin" parameterType="lan.qiao.domain.Gdmin">
+        select  * from gdmin where uid=#{uid} and password=#{password}
+    </select>
+    <select id="findOneByUid" parameterType="string" resultType="lan.qiao.domain.Gdmin">
+        select * from gdmin where uid=#{uid}
+    </select>
+    <delete id="delete" parameterType="string">
+        delete from gdmin where uid=#{uid}
+    </delete>
+
+    <update id="update" parameterType="lan.qiao.domain.Gdmin">
+        update gdmin set username=#{username},password=#{password},uid=#{uid},level=#{level} where id=#{id}
+    </update>
+
+</mapper>

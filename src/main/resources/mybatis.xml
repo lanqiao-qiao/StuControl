@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--    环境的设置-->
+    <environments default="development">
+        <environment id="development">
+            <!--            事务处理-->
+            <transactionManager type="JDBC"/>
+            <!--            数据连接池  POOLED/UNPOOLED-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/threeonezero?useUnicode=true&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"/>
+                <property name="username" value="root"/>
+                <property name="password" value="lanqiao228"/>
+            </dataSource>
+        </environment>
+
+    </environments>
+    <!--    使mybatis能够找到对应的映射文件-->
+    <mappers>
+        <!--        映射一个mapper文件,不建议-->
+        <!--        <mapper resource="org/mybatis/example/BlogMapper.xml"/>-->
+        <!--        映射一个mapper文件,建议-->
+        <!--        <mapper class="vip.szj.dao.UserMapper"/>-->
+        <!--        映射整个包下的mapper文件,极度推荐-->
+        <package name="lan.qiao.dao"/>
+        <!--        <mapper class="lan.qiao.dao.UserMapper"></mapper>-->
+        <!--        <mapper class="lan.qiao.dao.UserinfoMapper"></mapper>-->
+    </mappers>
+</configuration>

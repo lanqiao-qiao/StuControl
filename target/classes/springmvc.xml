@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+    <!-- 1.开启注解扫描,只扫描controller的注解,service和repositary是由spring负责的-->
+    <context:component-scan base-package="lan.qiao">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+    <!-- 2.配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="internalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!-- 配置静态资源过滤，不需要通过dispatchservlet处理的内容，减少性能的消耗-->
+    <mvc:annotation-driven/>
+    <mvc:resources mapping="/css/**" location="/css/"></mvc:resources>
+<!--    <mvc:resources mapping="/js/**" location="/js/"></mvc:resources>-->
+<!--    <mvc:resources mapping="/images/**" location="/images/"></mvc:resources>-->
+<!--    <mvc:resources mapping="/fonts/**" location="/fonts/"></mvc:resources>-->
+
+
+    <!--    &lt;!&ndash; 配置登录拦截器 &ndash;&gt;-->
+    <!--    <mvc:interceptors>-->
+    <!--        &lt;!&ndash;        登录拦截器&ndash;&gt;-->
+    <!--        <mvc:interceptor>-->
+    <!--            &lt;!&ndash;            拦截所有请求&ndash;&gt;-->
+    <!--            <mvc:mapping path="/**"/>-->
+    <!--            <mvc:exclude-mapping path="/user/login"/>-->
+    <!--            <mvc:exclude-mapping path="/user/addForm"/>-->
+    <!--            <mvc:exclude-mapping path="/css/**"/>-->
+    <!--            <mvc:exclude-mapping path="/js/**"/>-->
+    <!--            <mvc:exclude-mapping path="/images/**"/>-->
+    <!--            <mvc:exclude-mapping path="/fonts/**"/>-->
+    <!--            <mvc:exclude-mapping path="/userinfo/**"/>-->
+    <!--            <bean id="loginIntercrptor" class="lan.qiao.interceptor.LoginIntercrptor"></bean>-->
+    <!--        </mvc:interceptor>-->
+    <!--    </mvc:interceptors>-->
+</beans>
