@@ -13,7 +13,7 @@
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost:3306/threeonezero?useUnicode=true&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8"/>
                 <property name="username" value="root"/>
-                <property name="password" value="lanqiao228"/>
+                <property name="password" value=""/>
             </dataSource>
         </environment>
 
